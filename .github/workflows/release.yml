@@ -17,13 +17,13 @@ jobs:
         run: pip install pipenv && pipenv install --dev
       - name: Run tests
         run: |
-          py.test tests -s --cov=backend --cov-report=term-missing --cov-fail-under 95
+          pipenv run tests
       - name: Run linting
         run: |
-          flake8 backend tests
+          pipenv run linting
       - name: Run typing
         run: |
-          pyright backend tests
+          pipenv run typing
 
   Release:
     if: github.event.pull_request.merged == true
