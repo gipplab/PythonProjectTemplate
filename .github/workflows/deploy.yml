@@ -1,0 +1,54 @@
+name: Release and deploy
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+jobs:
+  fulltests:
+    runs-on: [self-hosted, dke]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: pip install pipenv && pipenv install --dev
+      - name: Run tests
+        run: |
+          py.test tests -s --cov=backend --cov-report=term-missing --cov-fail-under 95
+      - name: Run linting
+        run: |
+          flake8 backend tests
+      - name: Run typing
+        run: |
+          pyright backend tests
+
+  release:
+    if: github.event.pull_request.merged == true
+    needs: [tests]
+    runs-on: [self-hosted, dke]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+      - name: Build Changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@{latest-release}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          body: ${{steps.build_changelog.outputs.changelog}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
