@@ -9,7 +9,7 @@ on:
 
 jobs:
   Test:
-    runs-on: [self-hosted, dke]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -24,7 +24,7 @@ jobs:
           pipenv run tests
 
   Linter:
-    runs-on: [self-hosted, dke]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -39,7 +39,7 @@ jobs:
           pipenv run linting
 
   Typer:
-    runs-on: [self-hosted, dke]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
