@@ -3,7 +3,7 @@ from src.data.corpus import DataLoader, DummyLoader
 
 
 def test_corpus_loader() -> None:
-
+    # Testing the DataLoader class
     base_loader = DataLoader()
     corpus = DummyLoader()
 
