@@ -27,7 +27,7 @@ jobs:
 
   Release:
     if: github.event.pull_request.merged == true
-    needs: [tests]
+    needs: [fulltests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
