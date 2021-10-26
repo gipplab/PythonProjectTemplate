@@ -25,4 +25,5 @@ from src.modules.text_analysis import extract_n_grams
     ],
 )
 def test_extract_n_grams(documents: List[List[str]], n: int, expected: List[str]) -> None:
+    # Testing the function extract_n_grams
     assert extract_n_grams(documents, n) == expected
